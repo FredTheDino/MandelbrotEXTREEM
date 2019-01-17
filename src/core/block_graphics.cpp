@@ -21,6 +21,17 @@ Context initalize_graphics(const char *path)
 	glBindBuffer(GL_ARRAY_BUFFER, gfx.vertex_buffer);
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, (void *) 0);
 
+	glEnable(GL_MULTISAMPLE);
+	glGenTextures(1, &gfx.tex);
+	glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, gfx.tex);
+	glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 4, GL_RGBA8, game.width, game.height, true);
+
+	glGenFramebuffers(1, &gfx.fbo);
+	glBindFramebuffer(GL_FRAMEBUFFER, gfx.fbo);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, gfx.tex, 0);
+
+	//glCheckFramebufferStatus(target); // TODO: Assert something here?
+
 	gfx.shader_path = path;
 	gfx.shader = compile_progam(path);
 	gfx.shader_time = file_timestamp(path);
@@ -36,6 +47,8 @@ void destroy_graphics(Context *gfx)
 void frame(Context *gfx, Camera *camera)
 {
 	static u64 counter = 0;
+
+	glBindFramebuffer(GL_FRAMEBUFFER, gfx->fbo);
 	glClearColor(0.3f, 0.1f, 0.2f, 1.0f);
 
 	// Recompile shader
@@ -71,8 +84,17 @@ void frame(Context *gfx, Camera *camera)
 	glUniform2i(u_loc("dimensions"), game.width, game.height);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glDrawArrays(GL_QUADS, 0, 4);
-}
 
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, gfx->fbo);
+
+	//glDrawBuffer(GL_BACK);
+
+	glBlitFramebuffer(
+			0, 0, game.width, game.height, 
+			0, 0, game.width, game.height, 
+			GL_COLOR_BUFFER_BIT, GL_NEAREST);
+}
 
 #define COMPILATION_FAILED (-1)
 u32 compile_progam(const char *file)

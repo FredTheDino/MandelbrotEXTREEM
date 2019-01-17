@@ -4,21 +4,6 @@
 #ifndef __BLOCK_MAIN__
 #define __BLOCK_MAIN__
 
-// Types, you should preferably use these types since you
-// don't know how large the actual C/C++ types are.
-#include <stdint.h>
-typedef int8_t s8;
-typedef int16_t s16;
-typedef int32_t s32;
-typedef int64_t s64; // We assume these are a thing.
-typedef uint8_t u8;
-typedef uint16_t u16;
-typedef uint32_t u32;
-typedef uint64_t u64; // We assume these are a thing.
-typedef float f32;
-typedef double f64;
-
-#include "../math/block_math.h"
 
 bool str_eq(const char *_a, const char *_b, u32 len=-1)
 {
@@ -72,8 +57,8 @@ struct
 
 	bool running;
 
+	Context *gfx;
 	Clock clock;
-
 } game;
 
 //
@@ -94,6 +79,9 @@ void set_viewport_size(s32 width, s32 height)
 	game.width = width;
 	game.height = height;
 	game.aspect_ratio = (f32) height / width;
+
+	glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, game.gfx->tex);
+	glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 16, GL_RGBA8, game.width, game.height, true);
 }
 
 // Start up and initalize all the libraries.

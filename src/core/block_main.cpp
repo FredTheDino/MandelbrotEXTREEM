@@ -15,7 +15,26 @@ bool running = true;
 #pragma warning(pop)
 #endif
 
+// Types, you should preferably use these types since you
+// don't know how large the actual C/C++ types are.
+#include <stdint.h>
+typedef int8_t s8;
+typedef int16_t s16;
+typedef int32_t s32;
+typedef int64_t s64; // We assume these are a thing.
+typedef uint8_t u8;
+typedef uint16_t u16;
+typedef uint32_t u32;
+typedef uint64_t u64; // We assume these are a thing.
+typedef float f32;
+typedef double f64;
+
+#include "../math/block_math.h"
+
+
+#include "block_graphics.h"
 #include "block_main.h"
+
 #include "block_memory.h"
 #include "block_memory.cpp"
 
@@ -24,7 +43,6 @@ bool running = true;
 #include "block_input.h"
 #include "block_input.cpp"
 
-#include "block_graphics.h"
 #include "block_graphics.cpp"
 
 void initalize_libraries()
@@ -32,13 +50,13 @@ void initalize_libraries()
 	auto error = SDL_Init(SDL_INIT_EVERYTHING);
 	ASSERT(error == 0);
 
-	s32 window_width = 800;
-	s32 window_height = 800;
+	game.width = 800;
+	game.height = 800;
 	bool vsync = true;
 
 	game.window = SDL_CreateWindow("Mandelbrot Interactive Remasterd (Extreem)", 
 			SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-			window_width, window_height, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
+			game.width, game.height, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
 	ASSERT(game.window);
 
 	game.gl_context = SDL_GL_CreateContext(game.window);
@@ -50,7 +68,6 @@ void initalize_libraries()
 	// Perhaps make this optional. 
 	print("|| OpenGL Version: %d.%d\n", GLVersion.major, GLVersion.minor);
 
-	set_viewport_size(window_width, window_height);
 }
 
 void destroy_libraries()
@@ -77,6 +94,10 @@ void run()
 
 	Context gfx = initalize_graphics("res/shader.glsl");
 	InputManager manager = initalize_input();
+
+	game.gfx = &gfx;
+
+	set_viewport_size(game.width, game.height);
 
 	const char *RESET = "reset";
 	const char *VERT = "vert";

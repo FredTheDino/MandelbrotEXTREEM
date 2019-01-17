@@ -11,13 +11,12 @@ FOR %%A IN (%*) DO (
 	IF "%%A"=="/RELEASE" ( SET _RELEASE=YES )
 )
 
-
 SET _DEBUG_FLAGS=/Zi /Od /W2
 SET _RELEASE_FLAGS=/O2
 IF %_RELEASE% == YES (
-	SET _FLAGS=%_RELEASE_FLAGS% /nologo /std:c++latest /FC
+	SET _FLAGS=%_RELEASE_FLAGS% /nologo /std:c++14 /FC
 ) ELSE (
-	SET _FLAGS=%_DEBUG_FLAGS% /nologo /std:c++latest /FC
+	SET _FLAGS=%_DEBUG_FLAGS% /nologo /std:c++14 /FC
 )
 
 SET _INC=../inc

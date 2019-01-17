@@ -24,6 +24,9 @@ struct Context
 	const char *shader_path;
 	u64 shader_time;
 	u32 shader;
+
+	u32 fbo;
+	u32 tex;
 };
 
 // 
