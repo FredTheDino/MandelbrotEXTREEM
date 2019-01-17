@@ -44,7 +44,7 @@ void destroy_graphics(Context *gfx)
 	glDeleteProgram(gfx->vertex_buffer);
 }
 
-void frame(Context *gfx, Camera *camera)
+void frame(Context *gfx, Camera *camera, u32 iter)
 {
 	static u64 counter = 0;
 
@@ -82,6 +82,7 @@ void frame(Context *gfx, Camera *camera)
 	glUniform2f(u_loc("minimum"), min.x, min.y);
 	glUniform2f(u_loc("maximum"), max.x, max.y);
 	glUniform2i(u_loc("dimensions"), game.width, game.height);
+	glUniform1i(u_loc("depth"), iter);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glDrawArrays(GL_QUADS, 0, 4);
 

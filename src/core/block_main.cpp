@@ -101,6 +101,7 @@ void run()
 
 	const char *RESET = "reset";
 	const char *VERT = "vert";
+	const char *ITER = "iter";
 	const char *HORI = "hori";
 	const char *ZOOM = "zoom";
 	const char *CLOSE = "close";
@@ -120,6 +121,10 @@ void run()
 	add_binding(manager, KEY(q), ZOOM,  1);
 	add_binding(manager, KEY(e), ZOOM, -1);
 	add_binding(manager, CAXIS(RIGHTY), ZOOM);
+	add_input(manager, ITER);
+	add_binding(manager, KEY(z), ITER,  1);
+	add_binding(manager, KEY(c), ITER, -1);
+	add_binding(manager, CAXIS(RIGHTX), ITER);
 	add_input(manager, RESET);
 	add_binding(manager, KEY(r), RESET);
 	add_binding(manager, CBUTTON(X), RESET);
@@ -129,6 +134,7 @@ void run()
 	Camera camera = {};
 	camera.zoom = 2.5f;
 	
+	int iter = 100;
 	const f32 zoom_speed = 2;
 	const f32 speed = 1;
 	while (!released(manager, CLOSE) && running)
@@ -142,13 +148,16 @@ void run()
 			camera.zoom = 2.5f;
 		}
 
+		iter += (int) value(manager, ITER);
+		iter = maximum(iter, 0);
+
 		update_input(&manager);
 		camera.zoom *= (1 + zoom_speed * value(manager, ZOOM) * delta);
 		camera.position.x -= speed * value(manager, HORI) * delta * camera.zoom;
 		camera.position.y -= speed * value(manager, VERT) * delta * camera.zoom;
 
 
-		frame(&gfx, &camera);
+		frame(&gfx, &camera, iter);
 		SDL_GL_SwapWindow(game.window);
 	}
 

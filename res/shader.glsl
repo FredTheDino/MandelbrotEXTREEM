@@ -1,5 +1,6 @@
 // Transform
 uniform float time;
+uniform int depth;
 uniform vec2 minimum;
 uniform vec2 maximum;
 
@@ -28,7 +29,7 @@ void main()
 	float zx = 0;
 	float zy = 0;
 	out_color = vec4(0, 0, 0, 0);
-	for (int i = 0; i < int(sin(time) * 400.0 + 400.0); i++)
+	for (int i = 0; i < depth; i++)
 	{
 		float x = zx * zx - zy * zy + nx;
 		float y = zy * zx + zy * zx + ny;
