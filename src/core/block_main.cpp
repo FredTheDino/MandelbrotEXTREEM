@@ -54,7 +54,7 @@ void initalize_libraries()
 	game.height = 800;
 	bool vsync = true;
 
-	game.window = SDL_CreateWindow("Mandelbrot Interactive Remasterd (Extreem)", 
+	game.window = SDL_CreateWindow("Mandelbrot Interactive Remasterd (EXTREEM)", 
 			SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 			game.width, game.height, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
 	ASSERT(game.window);
