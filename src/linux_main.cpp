@@ -25,7 +25,7 @@ u64 linux_file_timestamp(const char *file)
 	return attr.st_mtim.tv_nsec;
 }
 
-const char *linux_read_entire_file(const char *file)
+const char *linux_read_entire_file(const char *file, u64 *length)
 {
 	FILE *stream = fopen(file, "r");
 	if (!stream)
@@ -36,6 +36,8 @@ const char *linux_read_entire_file(const char *file)
 	char *content = (char *) push_memory(sizeof(char) * file_size);
 	fread(content, file_size, 1, stream);
 	content[file_size - 1] = '\0';
+	if (length)
+		*length = file_size;
 	fclose(stream);
 	return content;
 }

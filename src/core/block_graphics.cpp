@@ -65,7 +65,7 @@ void frame(Context *gfx, Camera *camera)
 		if (counter == 30)
 		{
 			u32 shader = compile_progam(gfx->shader_path);
-			if (shader != -1)
+			if (shader != (u32) -1)
 			{
 				gfx->shader = shader;
 			}
@@ -105,7 +105,7 @@ u32 compile_progam(const char *file)
 		return COMPILATION_FAILED;
 	}
 
-	const char *preamble = "#version 140\n";
+	const char *preamble = "#version 130\n";
 #define NUM_SHADER_PARTS 3
 	const char *vert_source[NUM_SHADER_PARTS] = {preamble, "#define VERT\n", source};
 	const char *frag_source[NUM_SHADER_PARTS] = {preamble, "#define FRAG\n", source};
