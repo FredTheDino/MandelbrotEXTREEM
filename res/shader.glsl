@@ -71,7 +71,7 @@ void main()
 			float log_zn = log(x*x + y*y) / 2;
 			float nu = log(log_zn / log_2) / log_2; 
 			float i2 = i + 1 - nu;
-			out_color = vec4(i2 * 0.1, i2 * 0.005, i2 * 0.01, 1.0);
+			out_color = vec4(i2 * 0.1, i2 * i2 * 0.1, i2 * 0.01, 1.0);
 			// out_color = vec4(hsv2rgb(vec3(i2 / 32.0 + time, i2 * 0.02, 0.5)), 1.0);
 			break;
 		}
